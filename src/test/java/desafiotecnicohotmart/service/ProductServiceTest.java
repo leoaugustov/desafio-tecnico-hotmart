@@ -83,7 +83,7 @@ public class ProductServiceTest {
 	public void testUpdateById_when_productIdUnreconized() {
 		Long productId = 1L;
 		
-		when(productRepository.existsById(productId)).thenReturn(false);
+		when(productRepository.existsByIdAndActiveTrue(productId)).thenReturn(false);
 		
 		productService.updateById(productId, null);
 	}
@@ -92,7 +92,7 @@ public class ProductServiceTest {
 	public void testUpdateById_when_categoryIdUnreconized() {
 		Long productId = 1L;
 		
-		when(productRepository.existsById(productId)).thenReturn(true);
+		when(productRepository.existsByIdAndActiveTrue(productId)).thenReturn(true);
 		
 		Set<Long> categoriesIds = new HashSet<>();
 		categoriesIds.add(1L);
@@ -113,7 +113,7 @@ public class ProductServiceTest {
 		Long productId = 1L;
 		Long productCategoryId = 1L;
 		
-		when(productRepository.existsById(productId)).thenReturn(true);
+		when(productRepository.existsByIdAndActiveTrue(productId)).thenReturn(true);
 		
 		Set<Long> categoriesIds = new HashSet<>();
 		categoriesIds.add(productCategoryId);
@@ -141,7 +141,7 @@ public class ProductServiceTest {
 	public void testFindById_when_idUnreconized() {
 		Long id = 1L;
 		
-		when(productRepository.findById(id)).thenReturn(Optional.empty());
+		when(productRepository.findByIdAndActiveTrue(id)).thenReturn(Optional.empty());
 		
 		productService.findById(id);
 	}
@@ -152,29 +152,32 @@ public class ProductServiceTest {
 		
 		Product product = mock(Product.class);
 		
-		when(productRepository.findById(id)).thenReturn(Optional.of(product));
+		when(productRepository.findByIdAndActiveTrue(id)).thenReturn(Optional.of(product));
 		
 		assertThat(productService.findById(id)).isEqualTo(product);
 	}
 	
 	@Test(expected = EntityNotFoundException.class)
-	public void testDeleteById_when_idUnreconized() {
+	public void testDeactivateById_when_idUnreconized() {
 		Long id = 1L;
 		
-		when(productRepository.existsById(id)).thenReturn(false);
+		when(productRepository.findByIdAndActiveTrue(id)).thenReturn(Optional.empty());
 		
-		productService.deleteById(id);
+		productService.deactivateById(id);
 	}
 	
 	@Test
-	public void testDeleteById_when_idReconized() {
+	public void testDeactivateById_when_idReconized() {
 		Long id = 1L;
 		
-		when(productRepository.existsById(id)).thenReturn(true);
+		Product product = mock(Product.class);
 		
-		productService.deleteById(id);
+		when(productRepository.findByIdAndActiveTrue(id)).thenReturn(Optional.of(product));
 		
-		verify(productRepository).deleteById(id);
+		productService.deactivateById(id);
+		
+		verify(product).setActive(false);
+		verify(productRepository).save(product);
 	}
 	
 }

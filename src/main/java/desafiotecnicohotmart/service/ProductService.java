@@ -46,7 +46,7 @@ public class ProductService {
 	
 	@Transactional(rollbackFor = Exception.class)
 	public Product updateById(Long id, CreateProductDto updatedProductDto) {
-		if(productRepository.existsById(id)) {
+		if(productRepository.existsByIdAndActiveTrue(id)) {
 			updatedProductDto.getProduct().setId(id);
 			return save(updatedProductDto);
 		}
@@ -54,23 +54,23 @@ public class ProductService {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public void deleteById(Long id) {
-		if(productRepository.existsById(id)) {
-			productRepository.deleteById(id);
-			return;
-		}
-		throw new EntityNotFoundException(Product.class, id); 
+	public void deactivateById(Long id) {
+		Product product = productRepository.findByIdAndActiveTrue(id)
+				.orElseThrow(() -> new EntityNotFoundException(Product.class, id));
+		
+		product.setActive(false);
+		productRepository.save(product);
 	}
 
 	@Transactional(readOnly = true)
 	public Product findById(Long id) {
-		return productRepository.findById(id)
+		return productRepository.findByIdAndActiveTrue(id)
 				.orElseThrow(() -> new EntityNotFoundException(Product.class, id));
 	}
 	
 	@Transactional(readOnly = true)
 	public PageDto<Product> findAll(int page, int pageSize) {
-		return new PageDto<>(productRepository.findAll(PageRequest.of(page, pageSize)));
+		return new PageDto<>(productRepository.findAllByActiveTrue(PageRequest.of(page, pageSize)));
 	}
 	
 }

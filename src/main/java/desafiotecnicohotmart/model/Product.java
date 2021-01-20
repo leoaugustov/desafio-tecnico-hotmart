@@ -49,6 +49,10 @@ public class Product {
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 	
+	@Column(name = "is_active", nullable = false)
+	@JsonProperty(access = Access.READ_ONLY)
+	private boolean active = true;
+	
 	@CreationTimestamp
 	@Column(nullable = false, updatable = false)
 	@JsonProperty(access = Access.READ_ONLY)
