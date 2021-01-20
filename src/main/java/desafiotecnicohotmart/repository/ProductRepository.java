@@ -12,7 +12,7 @@ import desafiotecnicohotmart.model.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
 	@EntityGraph(attributePaths = {"category"})
-	Page<Product> findAllByActiveTrue(Pageable pageable);
+	Page<Product> findWithCategoryAllByActiveTrue(Pageable pageable);
 	
 	@EntityGraph(attributePaths = {"category"})
 	Optional<Product> findByIdAndActiveTrue(Long id);

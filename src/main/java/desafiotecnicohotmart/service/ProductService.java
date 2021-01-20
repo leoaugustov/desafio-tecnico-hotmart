@@ -57,7 +57,7 @@ public class ProductService {
 	
 	@Transactional(readOnly = true)
 	public PageDto<Product> findAll(int page, int pageSize) {
-		return new PageDto<>(productRepository.findAllByActiveTrue(PageRequest.of(page, pageSize)));
+		return new PageDto<>(productRepository.findWithCategoryAllByActiveTrue(PageRequest.of(page, pageSize)));
 	}
 	
 }
