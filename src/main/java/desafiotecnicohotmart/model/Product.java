@@ -1,6 +1,8 @@
 package desafiotecnicohotmart.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +18,7 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -52,6 +55,7 @@ public class Product {
 	@CreationTimestamp
 	@Column(nullable = false, updatable = false)
 	@JsonProperty(access = Access.READ_ONLY)
+	@NotAudited
 	private LocalDateTime creationDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -59,5 +63,13 @@ public class Product {
 	@JsonProperty(access = Access.READ_ONLY)
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	private ProductCategory category;
+	
+	public long getDaysOfExistence(LocalDate now) {
+		if(getCreationDate() == null) {
+			return 0;
+		}
+		LocalDate creationDate = getCreationDate().toLocalDate();
+		return creationDate.until(now, ChronoUnit.DAYS);
+	}
 	
 }
