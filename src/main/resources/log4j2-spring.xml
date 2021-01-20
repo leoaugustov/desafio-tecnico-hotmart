@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%date{dd/MM/yyyy HH:mm:ss}; %level; [%t]; %C; %msg%n%throwable"/>
+        </Console>
+        <File name="ExternalFile" fileName="service-aud-${date:yyyyMM}.log">
+        	<PatternLayout pattern="%date{dd/MM/yyyy HH:mm:ss}; %level; [%t]; %C; %msg%n%throwable" charset="UTF-8"/>
+        </File>
+	</Appenders>
+	
+	<Loggers>
+		<Root level="INFO">
+            <AppenderRef ref="Console"/>
+        </Root>
+        <Logger level="DEBUG" name="org.springframework.web.filter.CommonsRequestLoggingFilter" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="ExternalFile"/>
+        </Logger>
+	</Loggers>
+</Configuration>
