@@ -6,12 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -44,39 +39,33 @@ public class ProductServiceTest {
 	
 	@Test(expected = EntityNotFoundException.class)
 	public void testSave_when_categoryIdUnreconized() {
-		Set<Long> categoriesIds = new HashSet<>();
-		categoriesIds.add(1L);
+		Long categoryId = 1L;
 		
 		CreateProductDto productDto = mock(CreateProductDto.class);
-		when(productDto.getCategoriesIds()).thenReturn(categoriesIds);
+		when(productDto.getCategoryId()).thenReturn(categoryId);
 		
-		when(productCategoryRepository.findAllById(categoriesIds)).thenReturn(Collections.emptyList());
+		when(productCategoryRepository.findById(categoryId)).thenReturn(Optional.empty());
 		
 		productService.save(productDto);
 	}
 	
 	@Test
 	public void testSave_when_categoryIdReconized() {
-		Long productCategoryId = 1L;
-		
-		Set<Long> categoriesIds = new HashSet<>();
-		categoriesIds.add(productCategoryId);
+		Long categoryId = 1L;
 		
 		Product product = mock(Product.class);
 		
 		CreateProductDto productDto = mock(CreateProductDto.class);
-		when(productDto.getCategoriesIds()).thenReturn(categoriesIds);
+		when(productDto.getCategoryId()).thenReturn(categoryId);
 		when(productDto.getProduct()).thenReturn(product);
 		
 		ProductCategory productCategory = mock(ProductCategory.class);
-		when(productCategory.getId()).thenReturn(productCategoryId);
-		List<ProductCategory> categories = Arrays.asList(productCategory);
 		
-		when(productCategoryRepository.findAllById(categoriesIds)).thenReturn(categories);
+		when(productCategoryRepository.findById(categoryId)).thenReturn(Optional.of(productCategory));
 		
 		productService.save(productDto);
 		
-		verify(product).setCategories(categories);
+		verify(product).setCategory(productCategory);
 		verify(productRepository).save(product);
 	}
 	
@@ -92,19 +81,17 @@ public class ProductServiceTest {
 	@Test(expected = EntityNotFoundException.class)
 	public void testUpdateById_when_categoryIdUnreconized() {
 		Long productId = 1L;
+		Long categoryId = 1L;
 		
 		Product product = mock(Product.class);
 		
 		when(productRepository.findByIdAndActiveTrue(productId)).thenReturn(Optional.of(product));
 		
-		Set<Long> categoriesIds = new HashSet<>();
-		categoriesIds.add(1L);
-		
 		CreateProductDto productDto = mock(CreateProductDto.class);
 		when(productDto.getProduct()).thenReturn(product);
-		when(productDto.getCategoriesIds()).thenReturn(categoriesIds);
+		when(productDto.getCategoryId()).thenReturn(categoryId);
 		
-		when(productCategoryRepository.findAllById(categoriesIds)).thenReturn(Collections.emptyList());
+		when(productCategoryRepository.findById(categoryId)).thenReturn(Optional.empty());
 		
 		productService.updateById(productId, productDto);
 	}
@@ -112,7 +99,7 @@ public class ProductServiceTest {
 	@Test
 	public void testUpdateById_when_categoryIdReconized() {
 		Long productId = 1L;
-		Long productCategoryId = 1L;
+		Long categoryId = 1L;
 		LocalDateTime creationDate = LocalDateTime.now();
 		
 		Product product = mock(Product.class);
@@ -120,24 +107,19 @@ public class ProductServiceTest {
 		
 		when(productRepository.findByIdAndActiveTrue(productId)).thenReturn(Optional.of(product));
 		
-		Set<Long> categoriesIds = new HashSet<>();
-		categoriesIds.add(productCategoryId);
-		
 		CreateProductDto productDto = mock(CreateProductDto.class);
 		when(productDto.getProduct()).thenReturn(product);
-		when(productDto.getCategoriesIds()).thenReturn(categoriesIds);
+		when(productDto.getCategoryId()).thenReturn(categoryId);
 		
 		ProductCategory productCategory = mock(ProductCategory.class);
-		when(productCategory.getId()).thenReturn(productCategoryId);
-		List<ProductCategory> categories = Arrays.asList(productCategory);
 		
-		when(productCategoryRepository.findAllById(categoriesIds)).thenReturn(categories);
+		when(productCategoryRepository.findById(categoryId)).thenReturn(Optional.of(productCategory));
 		
 		productService.updateById(productId, productDto);
 		
 		verify(product).setId(productId);
 		verify(product).setCreationDate(creationDate);
-		verify(product).setCategories(categories);
+		verify(product).setCategory(productCategory);
 		verify(productRepository).save(product);
 	}
 	

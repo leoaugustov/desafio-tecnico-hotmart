@@ -1,8 +1,6 @@
 package desafiotecnicohotmart.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -57,14 +54,10 @@ public class Product {
 	@JsonProperty(access = Access.READ_ONLY)
 	private LocalDateTime creationDate;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(
-			name = "product_category_product", 
-			joinColumns = @JoinColumn(name = "product_id"), 
-			inverseJoinColumns = @JoinColumn(name = "category_id")
-	)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "category_id", nullable = false)
 	@JsonProperty(access = Access.READ_ONLY)
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-	private List<ProductCategory> categories = new ArrayList<>();
+	private ProductCategory category;
 	
 }

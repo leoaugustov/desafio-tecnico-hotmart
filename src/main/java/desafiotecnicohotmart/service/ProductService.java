@@ -1,9 +1,5 @@
 package desafiotecnicohotmart.service;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,22 +22,12 @@ public class ProductService {
 	
 	@Transactional(rollbackFor = Exception.class)
 	public Product save(CreateProductDto productDto) {
-		List<ProductCategory> productCategories = productCategoryRepository.findAllById(productDto.getCategoriesIds());
-		Set<Long> foundCategories = productCategories.stream()
-				.map(ProductCategory::getId)
-				.collect(Collectors.toSet());
+		ProductCategory productCategory = productCategoryRepository.findById(productDto.getCategoryId())
+				.orElseThrow(() -> new EntityNotFoundException(ProductCategory.class, productDto.getCategoryId()));
 		
-		Set<Long> notFoundCategories = productDto.getCategoriesIds().stream()
-				.filter(categoryId -> ! foundCategories.contains(categoryId))
-				.collect(Collectors.toSet());
-		
-		if(notFoundCategories.isEmpty()) {
-			Product product = productDto.getProduct();
-			product.setCategories(productCategories);
-			
-			return productRepository.save(product);
-		}
-		throw new EntityNotFoundException(ProductCategory.class, notFoundCategories);
+		Product product = productDto.getProduct();
+		product.setCategory(productCategory);
+		return productRepository.save(product);
 	}
 	
 	@Transactional(rollbackFor = Exception.class)

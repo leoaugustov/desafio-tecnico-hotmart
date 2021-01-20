@@ -1,8 +1,7 @@
 package desafiotecnicohotmart.dto;
 
-import java.util.Set;
-
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
@@ -17,7 +16,8 @@ public class CreateProductDto {
 	@JsonUnwrapped
 	private final Product product;
 	
-	@NotEmpty(message = "The product must have at least 1 category")
-	private final Set<Long> categoriesIds;
+	@Positive(message = "Category id must be a positive integer")
+	@NotNull(message = "Category id is mandatory")
+	private final Long categoryId;
 	
 }
