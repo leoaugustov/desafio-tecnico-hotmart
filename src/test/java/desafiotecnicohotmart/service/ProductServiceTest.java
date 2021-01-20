@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -83,7 +84,7 @@ public class ProductServiceTest {
 	public void testUpdateById_when_productIdUnreconized() {
 		Long productId = 1L;
 		
-		when(productRepository.existsByIdAndActiveTrue(productId)).thenReturn(false);
+		when(productRepository.findByIdAndActiveTrue(productId)).thenReturn(Optional.empty());
 		
 		productService.updateById(productId, null);
 	}
@@ -92,12 +93,12 @@ public class ProductServiceTest {
 	public void testUpdateById_when_categoryIdUnreconized() {
 		Long productId = 1L;
 		
-		when(productRepository.existsByIdAndActiveTrue(productId)).thenReturn(true);
+		Product product = mock(Product.class);
+		
+		when(productRepository.findByIdAndActiveTrue(productId)).thenReturn(Optional.of(product));
 		
 		Set<Long> categoriesIds = new HashSet<>();
 		categoriesIds.add(1L);
-		
-		Product product = mock(Product.class);
 		
 		CreateProductDto productDto = mock(CreateProductDto.class);
 		when(productDto.getProduct()).thenReturn(product);
@@ -112,13 +113,15 @@ public class ProductServiceTest {
 	public void testUpdateById_when_categoryIdReconized() {
 		Long productId = 1L;
 		Long productCategoryId = 1L;
+		LocalDateTime creationDate = LocalDateTime.now();
 		
-		when(productRepository.existsByIdAndActiveTrue(productId)).thenReturn(true);
+		Product product = mock(Product.class);
+		when(product.getCreationDate()).thenReturn(creationDate);
+		
+		when(productRepository.findByIdAndActiveTrue(productId)).thenReturn(Optional.of(product));
 		
 		Set<Long> categoriesIds = new HashSet<>();
 		categoriesIds.add(productCategoryId);
-		
-		Product product = mock(Product.class);
 		
 		CreateProductDto productDto = mock(CreateProductDto.class);
 		when(productDto.getProduct()).thenReturn(product);
@@ -133,6 +136,7 @@ public class ProductServiceTest {
 		productService.updateById(productId, productDto);
 		
 		verify(product).setId(productId);
+		verify(product).setCreationDate(creationDate);
 		verify(product).setCategories(categories);
 		verify(productRepository).save(product);
 	}

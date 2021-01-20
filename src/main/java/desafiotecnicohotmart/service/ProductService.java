@@ -46,11 +46,12 @@ public class ProductService {
 	
 	@Transactional(rollbackFor = Exception.class)
 	public Product updateById(Long id, CreateProductDto updatedProductDto) {
-		if(productRepository.existsByIdAndActiveTrue(id)) {
-			updatedProductDto.getProduct().setId(id);
-			return save(updatedProductDto);
-		}
-		throw new EntityNotFoundException(Product.class, id);
+		Product product = productRepository.findByIdAndActiveTrue(id)
+				.orElseThrow(() -> new EntityNotFoundException(Product.class, id));
+		
+		updatedProductDto.getProduct().setId(id);
+		updatedProductDto.getProduct().setCreationDate(product.getCreationDate());
+		return save(updatedProductDto);
 	}
 	
 	@Transactional(rollbackFor = Exception.class)

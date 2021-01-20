@@ -24,7 +24,6 @@ import org.hibernate.envers.RelationTargetAuditMode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -56,7 +55,6 @@ public class Product {
 	@CreationTimestamp
 	@Column(nullable = false, updatable = false)
 	@JsonProperty(access = Access.READ_ONLY)
-	@Setter(AccessLevel.NONE)
 	private LocalDateTime creationDate;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
