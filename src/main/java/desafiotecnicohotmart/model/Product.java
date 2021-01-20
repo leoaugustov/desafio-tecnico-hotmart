@@ -51,6 +51,7 @@ public class Product {
 	
 	@CreationTimestamp
 	@Column(nullable = false, updatable = false)
+	@JsonProperty(access = Access.READ_ONLY)
 	@Setter(AccessLevel.NONE)
 	private LocalDateTime creationDate;
 	
