@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,12 +26,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	private final ObjectMapper objectMapper;
 	
 	public JwtAuthenticationFilter(AuthenticationManager authenticationManager, 
-			AuthenticationService authService, ObjectMapper objectMapper) {
+			AuthenticationFailureHandler failureHandler, AuthenticationService authService, ObjectMapper objectMapper) {
 		
 		this.authenticationManager = authenticationManager;
 		this.authService = authService;
 		this.objectMapper = objectMapper;
 		setFilterProcessesUrl(AUTH_PATH);
+		setAuthenticationFailureHandler(failureHandler);
 	}
 	
 	@Override

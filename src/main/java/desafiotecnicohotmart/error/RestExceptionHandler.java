@@ -16,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import desafiotecnicohotmart.error.exception.EntityNotFoundException;
+import io.jsonwebtoken.ExpiredJwtException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -32,6 +33,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		ApiError error = new ApiError(HttpStatus.BAD_REQUEST, "Validation error");
 		error.addValidationErrors(e.getConstraintViolations());
 		
+		return buildResponseEntity(error, null);
+	}
+	
+	@ExceptionHandler(ExpiredJwtException.class)
+	protected ResponseEntity<?> handleExpiredJwtException(ExpiredJwtException e) {
+		ApiError error = new ApiError(HttpStatus.FORBIDDEN, "JWT expired");
 		return buildResponseEntity(error, null);
 	}
 	
