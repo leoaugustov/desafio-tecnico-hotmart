@@ -2,6 +2,7 @@ package desafiotecnicohotmart.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ import desafiotecnicohotmart.service.ProductService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping(path = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class ProductController {
 
