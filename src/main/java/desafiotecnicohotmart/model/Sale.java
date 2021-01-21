@@ -1,5 +1,7 @@
 package desafiotecnicohotmart.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,11 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,6 +36,11 @@ public class Sale {
 
 	@Column(nullable = false)
 	private int productRating;
+	
+	@CreationTimestamp
+	@Column(nullable = false, updatable = false)
+	@Setter(AccessLevel.NONE)
+	private LocalDateTime creationDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "seller_id", nullable = false)
