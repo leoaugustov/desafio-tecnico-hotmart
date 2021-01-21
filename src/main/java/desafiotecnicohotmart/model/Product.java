@@ -21,6 +21,8 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -49,7 +51,7 @@ public class Product {
 	private String description;
 	
 	@Column(name = "is_active", nullable = false)
-	@JsonProperty(access = Access.READ_ONLY)
+	@JsonIgnore
 	private boolean active = true;
 	
 	@CreationTimestamp

@@ -53,7 +53,7 @@ public class ProductScore {
 	
 	@Formula("x + y + z")
 	@Setter(AccessLevel.NONE)
-	private int score;
+	private double score;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", nullable = false, updatable = false)
