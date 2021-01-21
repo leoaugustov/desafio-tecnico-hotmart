@@ -4,7 +4,10 @@
 		<Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%date{dd/MM/yyyy HH:mm:ss}; %level; [%t]; %C; %msg%n%throwable"/>
         </Console>
-        <File name="ExternalFile" fileName="service-aud-${date:yyyyMM}.log">
+        <File name="ServiceAudit" fileName="service-aud-${date:yyyyMM}.log">
+        	<PatternLayout pattern="%date{dd/MM/yyyy HH:mm:ss}; %msg%n%throwable" charset="UTF-8"/>
+        </File>
+        <File name="CommonLog" fileName="app-${date:yyyyMM}.log">
         	<PatternLayout pattern="%date{dd/MM/yyyy HH:mm:ss}; %level; [%t]; %C; %msg%n%throwable" charset="UTF-8"/>
         </File>
 	</Appenders>
@@ -12,10 +15,11 @@
 	<Loggers>
 		<Root level="INFO">
             <AppenderRef ref="Console"/>
+            <AppenderRef ref="CommonLog"/>
         </Root>
         <Logger level="DEBUG" name="org.springframework.web.filter.CommonsRequestLoggingFilter" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="ExternalFile"/>
+            <AppenderRef ref="ServiceAudit"/>
         </Logger>
 	</Loggers>
 </Configuration>
