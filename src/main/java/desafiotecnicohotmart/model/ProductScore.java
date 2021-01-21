@@ -59,4 +59,14 @@ public class ProductScore {
 	@JoinColumn(name = "product_id", nullable = false, updatable = false)
 	private Product product;
 	
+	public ProductScore(double productSalesAverageRating, int productSalesAmount, int productDaysOfExistence, Product product) {
+		if(product == null) {
+			throw new IllegalArgumentException("Product cannot be null");
+		}
+		
+		x = productSalesAverageRating;
+		y = productDaysOfExistence == 0 ? 0 : (double) productSalesAmount / productDaysOfExistence;
+		this.product = product;
+	}
+	
 }
