@@ -17,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JoinFormula;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -26,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -66,12 +68,27 @@ public class Product {
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	private ProductCategory category;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinFormula("(SELECT ps.id FROM product_score ps WHERE ps.product_id = id ORDER BY ps.id DESC LIMIT 1)")
+	@JsonProperty(value = "score", access = Access.READ_ONLY)
+	@NotAudited
+	@Setter(AccessLevel.NONE)
+	private ProductScore lastScore;
+	
 	public long getDaysOfExistence(LocalDate now) {
 		if(getCreationDate() == null) {
 			return 0;
 		}
 		LocalDate creationDate = getCreationDate().toLocalDate();
 		return creationDate.until(now, ChronoUnit.DAYS);
+	}
+	
+	@JsonGetter("score")
+	private double getLastScore() {
+		if(lastScore == null) {
+			return 0;
+		}
+		return lastScore.getScore();
 	}
 	
 }

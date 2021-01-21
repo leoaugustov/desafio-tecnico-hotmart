@@ -20,6 +20,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	
 	Page<Product> findAllByActiveTrue(Pageable pageable);
 	
+	@EntityGraph(attributePaths = {"lastScore"})
+	Page<Product> findAllWithLastScoreByActiveTrue(Pageable pageable);
+	
+	@EntityGraph(attributePaths = {"lastScore"})
+	@Query("SELECT p FROM Product p WHERE p.active = true AND (p.name LIKE %?1% OR p.description LIKE %?1%)")
+	Page<Product> findAllWithLastScoreByActiveTrueAndNameOrDescriptionContaining(String q, Pageable pageable);
+	
 	@EntityGraph(attributePaths = {"category"})
 	Optional<Product> findByIdAndActiveTrue(Long id);
 	

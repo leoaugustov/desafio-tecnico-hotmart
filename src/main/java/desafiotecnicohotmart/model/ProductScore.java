@@ -18,6 +18,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -52,6 +53,7 @@ public class ProductScore {
 	private int z;
 	
 	@Formula("x + y + z")
+	@JsonValue
 	@Setter(AccessLevel.NONE)
 	private double score;
 	

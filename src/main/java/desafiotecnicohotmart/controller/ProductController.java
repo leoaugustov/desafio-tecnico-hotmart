@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import desafiotecnicohotmart.dto.CreateProductDto;
+import desafiotecnicohotmart.model.ProductsSearchSortType;
 import desafiotecnicohotmart.service.ProductService;
 import lombok.RequiredArgsConstructor;
 
@@ -50,6 +51,14 @@ public class ProductController {
 			@RequestParam(defaultValue = "7") int pageSize) {
 		
 		return ResponseEntity.ok(productService.findAll(page, pageSize));
+	}
+	
+	@GetMapping("/search")
+	public ResponseEntity<?> searchProducts(@RequestParam(defaultValue = "") String q,
+			@RequestParam(defaultValue = "NAME_ASC") ProductsSearchSortType sort,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "12") int pageSize) {
+		
+		return ResponseEntity.ok(productService.search(q, sort, page, pageSize));
 	}
 	
 }
