@@ -73,8 +73,9 @@ public class ProductService {
 	}
 	
 	@Transactional(readOnly = true)
-	public ProductsSearchDto search(String q, ProductsSearchSortType sort, int page, int pageSize) {
-		PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(sort.getDirection(), sort.getPropertyName()));
+	public ProductsSearchDto search(String q, String sort, int page, int pageSize) {
+		ProductsSearchSortType sortType = ProductsSearchSortType.valueByQueryParam(sort).get();
+		PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(sortType.getDirection(), sortType.getPropertyName()));
 		
 		Page<Product> productsPage;
 		if(q.isEmpty()) {
