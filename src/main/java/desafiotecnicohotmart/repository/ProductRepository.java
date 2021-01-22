@@ -30,12 +30,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	@EntityGraph(attributePaths = {"category"})
 	Optional<Product> findByIdAndActiveTrue(Long id);
 	
-	@Query("SELECT p.id as productId, COUNT(p.id) as salesAmount FROM Product p, Sale s WHERE s.product.id = p.id")
+	@Query("SELECT p.id as productId, COUNT(p.id) as salesAmount FROM Product p, Sale s WHERE s.product.id = p.id GROUP BY p.id")
 	List<ProductSalesAmountProjection> findAllWithSalesAmount();
 	
 	@Query(
 			value = "SELECT p.id as productId, AVG(s.product_rating) as salesAverageRating FROM product p, sale s "
-					+ "WHERE s.product_id = p.id AND s.creation_date > DATE_SUB(NOW(), INTERVAL 12 MONTH)", 
+					+ "WHERE s.product_id = p.id AND s.creation_date > DATE_SUB(NOW(), INTERVAL 12 MONTH) GROUP BY p.id", 
 			nativeQuery = true
 	)
 	List<ProductSalesAverageRatingProjection> findAllWithSalesAverageRating();
