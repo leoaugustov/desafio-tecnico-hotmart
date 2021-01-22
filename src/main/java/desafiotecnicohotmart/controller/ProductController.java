@@ -1,6 +1,7 @@
 package desafiotecnicohotmart.controller;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +60,8 @@ public class ProductController {
 	@GetMapping("/search")
 	public ResponseEntity<?> searchProducts(@RequestParam(defaultValue = "") String q,
 			@RequestParam(defaultValue = "name.asc") @ProductSearchSortTypeConstraint String sort,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "12") int pageSize) {
+			@RequestParam(defaultValue = "0") int page, 
+			@RequestParam(defaultValue = "12") @Max(value = 80, message = "Must be less than or equal to 80") int pageSize) {
 		
 		return ResponseEntity.ok(productService.search(q, sort, page, pageSize));
 	}
