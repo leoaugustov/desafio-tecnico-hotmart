@@ -38,7 +38,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test(expected = EntityNotFoundException.class)
-	public void testSave_when_categoryIdUnreconized() {
+	public void testSave_when_categoryIdUnrecognized() {
 		Long categoryId = 1L;
 		
 		CreateProductDto productDto = mock(CreateProductDto.class);
@@ -50,7 +50,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test
-	public void testSave_when_categoryIdReconized() {
+	public void testSave_when_categoryIdRecognized() {
 		Long categoryId = 1L;
 		
 		Product product = mock(Product.class);
@@ -70,7 +70,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test(expected = EntityNotFoundException.class)
-	public void testUpdateById_when_productIdUnreconized() {
+	public void testUpdateById_when_productIdUnrecognized() {
 		Long productId = 1L;
 		
 		when(productRepository.findByIdAndActiveTrue(productId)).thenReturn(Optional.empty());
@@ -79,7 +79,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test(expected = EntityNotFoundException.class)
-	public void testUpdateById_when_categoryIdUnreconized() {
+	public void testUpdateById_when_categoryIdUnrecognized() {
 		Long productId = 1L;
 		Long categoryId = 1L;
 		
@@ -97,7 +97,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test
-	public void testUpdateById_when_categoryIdReconized() {
+	public void testUpdateById_when_categoryIdRecognized() {
 		Long productId = 1L;
 		Long categoryId = 1L;
 		LocalDateTime creationDate = LocalDateTime.now();
@@ -124,7 +124,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test(expected = EntityNotFoundException.class)
-	public void testFindById_when_idUnreconized() {
+	public void testFindById_when_idUnrecognized() {
 		Long id = 1L;
 		
 		when(productRepository.findByIdAndActiveTrue(id)).thenReturn(Optional.empty());
@@ -133,18 +133,18 @@ public class ProductServiceTest {
 	}
 	
 	@Test
-	public void testFindById_when_idReconized() {
+	public void testFindById_when_idRecognized() {
 		Long id = 1L;
 		
 		Product product = mock(Product.class);
 		
 		when(productRepository.findByIdAndActiveTrue(id)).thenReturn(Optional.of(product));
 		
-		assertThat(productService.findById(id)).isEqualTo(product);
+		assertThat(productService.findById(id).getProduct()).isEqualTo(product);
 	}
 	
 	@Test(expected = EntityNotFoundException.class)
-	public void testDeactivateById_when_idUnreconized() {
+	public void testDeactivateById_when_idUnrecognized() {
 		Long id = 1L;
 		
 		when(productRepository.findByIdAndActiveTrue(id)).thenReturn(Optional.empty());
@@ -153,7 +153,7 @@ public class ProductServiceTest {
 	}
 	
 	@Test
-	public void testDeactivateById_when_idReconized() {
+	public void testDeactivateById_when_idRecognized() {
 		Long id = 1L;
 		
 		Product product = mock(Product.class);
